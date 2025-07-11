@@ -1,142 +1,166 @@
-1. Prerequisites
-Hardware
-A compatible WiFi adapter that supports monitor mode and packet injection.
+# WPS-Hunter: OneShot WiFi Security Tool
 
-General Requirements
-Python 3.6 or higher
+Welcome to **WPS-Hunter**, a comprehensive WiFi security auditing tool. This project features advanced attacks such as **PMKID**, **WPS Pixie Dust**, **Evil Twin**, and **Default Credentials** in a modern Python 3.8+ framework.
 
-Root privileges (especially for WiFi operations)
+> **Disclaimer:**  
+> This tool is for educational and authorized security testing purposes only. Unauthorized use is illegal.
 
-Required system tools: iw, wpa_supplicant, pixiewps
+## Features
 
-Optional but recommended: aircrack-ng suite
+- PMKID Attack (with GPU acceleration)
+- WPS Pixie Dust Attacks (2025 algorithms)
+- Evil Twin Access Point Attacks
+- Default Credentials Attacks
+- Advanced Logging & Session Management
+- Python 3.8+ Compatibility
 
-2. Installation Steps
-A. On Kali Linux / Ubuntu
-Update System and Install Dependencies
+## Table of Contents
 
-bash
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+  - [Kali Linux & Ubuntu](#kali-linux--ubuntu)
+  - [Termux (Android)](#termux-android)
+  - [Windows](#windows)
+- [Downloading WPS-Hunter](#downloading-wps-hunter)
+- [Usage](#usage)
+  - [PMKID Attack](#pmkid-attack)
+  - [Cracking PMKID with Hashcat](#cracking-pmkid-with-hashcat)
+  - [WPS Pixie Dust Attack](#wps-pixie-dust-attack)
+  - [Evil Twin Attack](#evil-twin-attack)
+  - [Default Credentials Attack](#default-credentials-attack)
+  - [List All Options](#list-all-options)
+- [Monitor Mode](#monitor-mode)
+- [Troubleshooting](#troubleshooting)
+- [Summary Table](#summary-table)
+- [Legal Notice](#legal-notice)
+
+## Prerequisites
+
+- Python 3.8 or newer
+- System privileges (root/administrator access)
+- Wireless adapter that supports monitor mode and packet injection
+
+## Installation
+
+### Kali Linux & Ubuntu
+
+```bash
 sudo apt update
-sudo apt install git python3 python3-pip iw wpa_supplicant pixiewps
-Clone the Repository
-
-bash
-git clone https://github.com/PeterPan9696/WPS-Hunter.git
-cd WPS-Hunter
-(Optional) Install Additional Python Modules
-
-If the script requires extra modules (e.g., requests), install them:
-
-bash
+sudo apt install python3 python3-pip git build-essential
+sudo apt install hashcat hcxtools hostapd dnsmasq iptables
 pip3 install requests
-B. On Termux (Android)
-Update and Install Packages
+```
 
-bash
+### Termux (Android)
+
+```bash
 pkg update
-pkg install git python python-pip root-repo
-pkg install iw wpa_supplicant
-Install Pixiewps
+pkg install python git clang
+pip install requests
+```
+> **Note:** Wireless attacks requiring monitor mode or packet injection are not fully supported in Termux due to hardware/driver limitations.
 
-If available in the repo:
+### Windows
 
-bash
-pkg install pixiewps
-If not, compile from source (advanced users):
+1. **Install Python:** Download and install Python 3.8+ from the official website.
+2. **Install Git:** Download and install Git for Windows.
+3. **Install Hashcat:** Download and install Hashcat from the official site.
+4. **Install dependencies:**
+   ```powershell
+   pip install requests
+   ```
+> **Note:** Most wireless attacks require Linux utilities and compatible hardware. Full functionality is best achieved in a Linux environment.
 
-bash
-git clone https://github.com/wiire/pixiewps.git
-cd pixiewps
-make
-cp pixiewps $PREFIX/bin/
-cd ..
-Clone WPS-Hunter
+## Downloading WPS-Hunter
 
-bash
+Clone this repository:
+
+```bash
 git clone https://github.com/PeterPan9696/WPS-Hunter.git
 cd WPS-Hunter
-Install Python Dependencies
+```
 
-bash
-pip install requests
-3. Usage Guide for All Attacks
-A. Scanning for WPS Networks
-bash
-sudo python3 oneshot.py -i wlan0
-Replace wlan0 with your wireless interface name.
+Or copy `oneshot.py` into your working directory.
 
-The tool will scan and list available WPS-enabled networks.
+## Usage
 
-B. PixieWPS Attack
-Select Target
+Make the script executable and run it:
 
-Use the scan to identify the BSSID of your target.
+```bash
+chmod +x oneshot.py
+sudo python3 oneshot.py --help
+```
+> **Use `sudo`** for root privileges, required for most attacks.
 
-Run Pixie Dust Attack
+### PMKID Attack
 
-bash
-sudo python3 oneshot.py -i wlan0 -b <BSSID> -K
-The -K or --pixie-dust flag triggers the PixieWPS attack.
+```bash
+sudo python3 oneshot.py --pmkid --interface wlan0
+```
+- Captures PMKID handshakes for WPA/WPA2 networks.
 
-You may be prompted to select a PIN or it will attempt likely ones automatically.
+### Cracking PMKID with Hashcat
 
-If successful, the WPA PSK (WiFi password) will be displayed.
+```bash
+hashcat -m 22000  
+```
 
-C. Online WPS Bruteforce Attack
-bash
-sudo python3 oneshot.py -i wlan0 -b <BSSID> -B
-The -B or --bruteforce flag starts an online PIN brute-force attack.
+### WPS Pixie Dust Attack
 
-You can specify a starting PIN with -p <PIN> or let the tool generate likely ones.
+```bash
+sudo python3 oneshot.py --wps --interface wlan0 --target 
+```
 
-D. Push Button Connect (PBC) Attack
-bash
-sudo python3 oneshot.py -i wlan0 -b <BSSID> --pbc
-Attempts to connect using the WPS Push Button method.
+### Evil Twin Attack
 
-E. Smart/Resume Bruteforce (Session Recovery)
-bash
-sudo python3 oneshot.py -i wlan0 -b <BSSID> -B -p <START_PIN>
-If a previous session was interrupted, the tool can resume from the last attempted PIN.
+```bash
+sudo python3 oneshot.py --eviltwin --interface wlan0 --essid "" --bssid  --channel 
+```
 
-F. Additional Options
-Save Credentials to File:
-Add -w to store found credentials.
+### Default Credentials Attack
 
-Verbose Output:
-Add -v for more detailed logs.
+```bash
+sudo python3 oneshot.py --default-creds --interface wlan0
+```
 
-Interface Down After Attack:
-Add --iface-down to bring the interface down after finishing.
+### List All Options
 
-4. Example Attack Workflow
-Scan for Targets
+```bash
+sudo python3 oneshot.py --help
+```
 
-bash
-sudo python3 oneshot.py -i wlan0
-Choose a Target BSSID from the List
+## Monitor Mode
 
-Run PixieWPS Attack
+Enable monitor mode if not handled by the script:
 
-bash
-sudo python3 oneshot.py -i wlan0 -b <BSSID> -K
-If PixieWPS Fails, Try Bruteforce
+```bash
+sudo ip link set wlan0 down
+sudo iwconfig wlan0 mode monitor
+sudo ip link set wlan0 up
+```
 
-bash
-sudo python3 oneshot.py -i wlan0 -b <BSSID> -B
-Store Results
+## Troubleshooting
 
-Use -w to save successful credentials.
+- If you see errors about missing tools (`hcxdumptool`, `hcxpcapngtool`, etc.), install them with:
+  ```bash
+  sudo apt install hcxtools
+  ```
+- For GPU acceleration, ensure your drivers and CUDA are correctly installed.
+- Logs are saved to `oneshot_ultimate.log` in the working directory.
 
-5. Notes and Troubleshooting
-Root Access:
-All attacks require root privileges.
+## Summary Table
 
-Wireless Interface:
-Ensure your adapter supports monitor mode and is compatible with your OS.
+| Platform      | Python    | Dependencies (apt/pkg)                      | Extra Steps                |
+|---------------|-----------|---------------------------------------------|----------------------------|
+| Kali/Ubuntu   | `sudo apt install python3 python3-pip` | `sudo apt install hashcat hcxtools hostapd dnsmasq iptables` | `pip3 install requests`    |
+| Termux        | `pkg install python`                  | `pkg install git clang`                        | `pip install requests`     |
+| Windows       | Download installer                    | Use pip in CMD/PowerShell                      | Install Hashcat manually   |
 
-Termux Limitations:
-Some WiFi drivers and monitor mode features may not work on all Android devices.
+## Legal Notice
 
-Missing Modules:
-If you see ModuleNotFoundError, install the missing Python module with pip install <module>.
+**Use this tool only on networks you own or have explicit permission to test. Unauthorized use is illegal and strictly prohibited.**
+
+**Happy auditing!**  
+If you have suggestions or want to contribute, feel free to open an issue or pull request.
+
+[1] https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/51016415/2ce60b91-d096-46dc-a00a-affd65ffe39d/oneshot.py
