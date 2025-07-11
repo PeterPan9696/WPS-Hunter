@@ -156,6 +156,35 @@ sudo ip link set wlan0 up
 | Termux        | `pkg install python`                  | `pkg install git clang`                        | `pip install requests`     |
 | Windows       | Download installer                    | Use pip in CMD/PowerShell                      | Install Hashcat manually   |
 
+## General Command Interface
+
+To use the WPS-Hunter tool for WiFi security attacks, the basic command-line interface is:
+
+```bash
+sudo python WPS-Hunter/oneshot.py -i wlan0 [attack-options]
+```
+
+- `sudo`: Run as root for required permissions.
+- `python`: Use Python 3.8+.
+- `WPS-Hunter/oneshot.py`: Path to the main script.
+- `-i wlan0`: Specify your wireless interface (replace `wlan0` with your actual interface).
+- `[attack-options]`: Replace with the desired attack mode or options.
+
+### Example Attack Commands
+
+| Attack Type               | Command Example                                                                 |
+|---------------------------|--------------------------------------------------------------------------------|
+| PMKID Attack              | `sudo python WPS-Hunter/oneshot.py -i wlan0 --pmkid`                           |
+| WPS Pixie Dust Attack     | `sudo python WPS-Hunter/oneshot.py -i wlan0 --wps --target `            |
+| Evil Twin Attack          | `sudo python WPS-Hunter/oneshot.py -i wlan0 --eviltwin --essid "" --bssid  --channel ` |
+| Default Credentials Attack| `sudo python WPS-Hunter/oneshot.py -i wlan0 --default-creds`                   |
+| Show Help/All Options     | `sudo python WPS-Hunter/oneshot.py -i wlan0 --help`                            |
+
+**Replace** ``, ``, and `` with your target network's details as needed.
+
+> Use the `--help` flag to see all available options and attack modes.
+
+
 ## Legal Notice
 
 **Use this tool only on networks you own or have explicit permission to test. Unauthorized use is illegal and strictly prohibited.**
