@@ -56,7 +56,7 @@ def die(msg):
 
 def usage():
     return """
-OneShotPin (updated) — WPS and PMKID attack tool
+OneShotPin (updated) â€” WPS and PMKID attack tool
 
 Required arguments:
   -i, --interface=   : Name of the interface to use
@@ -75,7 +75,7 @@ Optional arguments:
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(
-        description='OneShotPin (updated) — WPS and PMKID attack tool',
+        description='OneShotPin (updated) â€” WPS and PMKID attack tool',
         epilog='Example: %(prog)s -i wlan0 -b 00:90:4C:C1:AC:21 -K'
     )
 
@@ -126,7 +126,7 @@ if __name__ == '__main__':
                         vuln_list = []
                     scanner = WiFiScanner(args.interface, vuln_list)
                     if not args.loop:
-                        print('[*] BSSID not specified (--bssid) — scanning for available networks')
+                        print('[*] BSSID not specified (--bssid) â€” scanning for available networks')
                     args.bssid = scanner.prompt_network()
                 if args.bssid:
                     companion = Companion(args.interface, args.write, print_debug=args.verbose)
@@ -141,12 +141,12 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             if args.loop:
                 if input("\n[?] Exit the script (otherwise continue to AP scan)? [N/y] ").lower() == 'y':
-                    print("Aborting…")
+                    print("Abortingâ€¦")
                     break
                 else:
                     args.bssid = None
             else:
-                print("\nAborting…")
+                print("\nAbortingâ€¦")
                 break
 
     if args.iface_down:
