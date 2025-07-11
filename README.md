@@ -163,4 +163,3 @@ sudo ip link set wlan0 up
 **Happy auditing!**  
 If you have suggestions or want to contribute, feel free to open an issue or pull request.
 
-[1] https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/51016415/2ce60b91-d096-46dc-a00a-affd65ffe39d/oneshot.py
